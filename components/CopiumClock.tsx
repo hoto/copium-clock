@@ -40,15 +40,13 @@ const CopiumClock: React.FC = () => {
       </div>
       <div className="text-xl">
         <p>
-          Work start time: {workStartTime.toLocaleTimeString()}
+          Work start {workStartTime.toLocaleTimeString()}
         </p>
-        <p>Take home monthly: {format(takeHomeMonthlySalary, 0, 0)} </p>
-        <p>Daily: {format(dailyAmount, 0, 0)} </p>
-        <p>Hourly: {format(hourlyAmount)} </p>
-        <p>Minutely: {format(minutelyAmount)} </p>
-        <p>Secondly: {format(secondlyAmount, 3, 3)} </p>
-        <br />
-        <p>Seconds passed: {secondsSinceWorkStartTime} </p>
+        <p>Month {format(takeHomeMonthlySalary, 0, 0)} </p>
+        <p>Day {format(dailyAmount, 0, 0)} </p>
+        <p>Hour {format(hourlyAmount)} </p>
+        <p>Min {format(minutelyAmount)} </p>
+        <p>Sec {format(secondlyAmount, 3, 3)} </p>
       </div>
     </div>
   )
