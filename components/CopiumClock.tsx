@@ -7,7 +7,7 @@ const CopiumClock: React.FC = () => {
   target.setHours(9, 0, 0, 0)
   const [workStartTime, setWorkStartTime] = useState<Date>(target)
   const [secondsSinceWorkStartTime, setSecondsSinceWorkStartTime] = useState<number>(0)
-  const [takeHomeMonthlySalary, setTakeHomeMonthlySalary] = useState<number>(5000)
+  const [takeHomeMonthlySalary, setTakeHomeMonthlySalary] = useState<number>(4000)
   const [dailyAmount, setDailyAmount] = useState<number>(0)
   const [hourlyAmount, setHourlyAmount] = useState<number>(0)
   const [minutelyAmount, setminutelyAmount] = useState<number>(0)
