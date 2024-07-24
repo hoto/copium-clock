@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 const CopiumClock: React.FC = () => {
   const target = new Date()
-  target.setHours(8, 0, 0, 0)
+  target.setHours(9, 0, 0, 0)
   const [workStartTime, setWorkStartTime] = useState<Date>(target)
   const [secondsSinceWorkStartTime, setSecondsSinceWorkStartTime] = useState<number>(0)
   const [takeHomeMonthlySalary, setTakeHomeMonthlySalary] = useState<number>(5000)
@@ -10,21 +10,21 @@ const CopiumClock: React.FC = () => {
   const [hourlyAmount, setHourlyAmount] = useState<number>(0)
   const [minutlyAmount, setMinutlyAmount] = useState<number>(0)
   const [secondlyAmount, setSecondlyAmount] = useState<number>(0)
-  const [amountMadeToday, setAmountMadeToday] = useState<number>(70.00)
+  const [amountMadeToday, setAmountMadeToday] = useState<number>(0)
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setAmountMadeToday(amount => amount + 0.01)
       setSecondsSinceWorkStartTime(Math.floor((new Date().getTime() - workStartTime.getTime()) / 1000))
+      setAmountMadeToday(secondlyAmount * secondsSinceWorkStartTime)
     }, 1000)
     return () => clearInterval(interval)
-  }, [])
+  }, [workStartTime, secondlyAmount, amountMadeToday, secondsSinceWorkStartTime])
 
   useEffect(() => {
     setDailyAmount(takeHomeMonthlySalary / 20) // 20 working days in a month
-    setHourlyAmount(dailyAmount / 8)
-    setMinutlyAmount(hourlyAmount / 60)
-    setSecondlyAmount(minutlyAmount / 60)
+    setHourlyAmount(takeHomeMonthlySalary / 20 / 8)
+    setMinutlyAmount(takeHomeMonthlySalary / 20 / 8 / 60)
+    setSecondlyAmount(takeHomeMonthlySalary / 20 / 8 / 60 / 60)
   }, [workStartTime, secondsSinceWorkStartTime])
 
   return (
@@ -41,7 +41,7 @@ const CopiumClock: React.FC = () => {
         <p>Hourly: {format(hourlyAmount)} </p>
         <p>Minutly: {format(minutlyAmount.toFixed())} </p>
         <p>Secondly: {format(secondlyAmount.toFixed(3))} </p>
-        <br/>
+        <br />
         <p>Seconds passed: {secondsSinceWorkStartTime} </p>
       </div>
     </div>
