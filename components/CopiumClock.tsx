@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 
+const eightHoursInSeconds = 8 * 60 * 60
+
 const CopiumClock: React.FC = () => {
   const target = new Date()
   target.setHours(9, 0, 0, 0)
@@ -8,24 +10,28 @@ const CopiumClock: React.FC = () => {
   const [takeHomeMonthlySalary, setTakeHomeMonthlySalary] = useState<number>(5000)
   const [dailyAmount, setDailyAmount] = useState<number>(0)
   const [hourlyAmount, setHourlyAmount] = useState<number>(0)
-  const [minutlyAmount, setMinutlyAmount] = useState<number>(0)
+  const [minutelyAmount, setminutelyAmount] = useState<number>(0)
   const [secondlyAmount, setSecondlyAmount] = useState<number>(0)
   const [amountMadeToday, setAmountMadeToday] = useState<number>(0)
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setSecondsSinceWorkStartTime(Math.floor((new Date().getTime() - workStartTime.getTime()) / 1000))
-      setAmountMadeToday(secondlyAmount * secondsSinceWorkStartTime)
-    }, 1000)
-    return () => clearInterval(interval)
-  }, [workStartTime, secondlyAmount, amountMadeToday, secondsSinceWorkStartTime])
-
-  useEffect(() => {
     setDailyAmount(takeHomeMonthlySalary / 20) // 20 working days in a month
     setHourlyAmount(takeHomeMonthlySalary / 20 / 8)
-    setMinutlyAmount(takeHomeMonthlySalary / 20 / 8 / 60)
+    setminutelyAmount(takeHomeMonthlySalary / 20 / 8 / 60)
     setSecondlyAmount(takeHomeMonthlySalary / 20 / 8 / 60 / 60)
-  }, [workStartTime, secondsSinceWorkStartTime])
+  }, [takeHomeMonthlySalary, workStartTime, secondsSinceWorkStartTime])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSecondsSinceWorkStartTime(Math.floor((new Date().getTime() - workStartTime.getTime()) / 1000))
+      if (secondsSinceWorkStartTime >= eightHoursInSeconds) {
+        setAmountMadeToday(dailyAmount)
+      } else {
+        setAmountMadeToday(secondlyAmount * secondsSinceWorkStartTime)
+      }
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [dailyAmount, workStartTime, secondlyAmount, amountMadeToday, secondsSinceWorkStartTime])
 
   return (
     <div>
@@ -39,8 +45,8 @@ const CopiumClock: React.FC = () => {
         <p>Take home monthly: {format(takeHomeMonthlySalary, 0, 0)} </p>
         <p>Daily: {format(dailyAmount, 0, 0)} </p>
         <p>Hourly: {format(hourlyAmount)} </p>
-        <p>Minutly: {format(minutlyAmount.toFixed())} </p>
-        <p>Secondly: {format(secondlyAmount.toFixed(3))} </p>
+        <p>Minutely: {format(minutelyAmount)} </p>
+        <p>Secondly: {format(secondlyAmount, 3, 3)} </p>
         <br />
         <p>Seconds passed: {secondsSinceWorkStartTime} </p>
       </div>
@@ -54,4 +60,5 @@ const format = (amount: number | string, min = 2, max = 2): string => {
     .NumberFormat('en-GB', { minimumFractionDigits: min, maximumFractionDigits: max })
     .format(Number(amount))
 }
+
 export default CopiumClock
