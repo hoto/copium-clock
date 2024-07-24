@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react'
 
 const CopiumClock: React.FC = () => {
-  const [amount, setAmount] = useState<number>(70.01)
+  const [amount, setAmount] = useState<number>(70.00)
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setAmount(amount => {
-        const newAmount= amount + 0.01
-        return parseFloat(newAmount.toFixed(2))
-      })
+      setAmount(amount => amount + 0.01)
     }, 1000)
 
     return () => clearInterval(interval)
@@ -16,7 +13,9 @@ const CopiumClock: React.FC = () => {
 
   return (
     <div className="text-9xl">
-      {amount}£
+      £{new Intl
+      .NumberFormat('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      .format(amount)}
     </div>
   )
 }
